@@ -25,7 +25,16 @@ exports.getAllContacts = async (req, res) => {
   }
 }
 
-exports.updateContacts = async (req, res) => {
+exports.getOneContact = async (req, res) => {
+  try {
+    const oneContact = await contact.findOne({ _id: req.params.id })
+    res.status(200).send({ msg: 'one contact : ', oneContact })
+  } catch (err) {
+    res.status(500).send(err)
+  }
+}
+
+exports.updateContact = async (req, res) => {
   try {
     const editedContact = await contact.updateOne(
       { _id: req.params.id },
@@ -37,7 +46,7 @@ exports.updateContacts = async (req, res) => {
   }
 }
 
-exports.deleteContacts = async (req, res) => {
+exports.deleteContact = async (req, res) => {
   try {
     const deletedcontact = await contact.deleteOne({ _id: req.params.id })
     res.status(200).send({ msg: 'contact deleted ' })

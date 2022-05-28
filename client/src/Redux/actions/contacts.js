@@ -1,20 +1,33 @@
-import { LOAD, ERROR, ALLCONTACTS } from '../types/contacts'
+import { LOAD, ERROR, ALLCONTACTS, ONECONTACT } from '../types/contacts'
+import axios from 'axios'
 
-const getAllContacts = () => async (dispatch) => {
+export const getAllContacts = () => async (dispatch) => {
   dispatch({ type: LOAD })
   try {
-    let res = await axios.get('http://localhost:5005/api/contacts/allContacts')
+    let res = await axios.get('http://localhost:5001/api/contacts/allcontacts')
     dispatch({ type: ALLCONTACTS, payload: res.data.allContacts })
   } catch (err) {
     dispatch({ type: ERROR, err: err.message })
   }
 }
 
-const addContact = (newContact) => async (dispatch) => {
+export const getOneContact = (id) => async (dispatch) => {
   dispatch({ type: LOAD })
   try {
-    let res = await axios.post(
-      'http://localhost:5005/api/contacts/addcontact',
+    let res = await axios.get(
+      `http://localhost:5001/api/contacts/onecontact/${id}`,
+    )
+    dispatch({ type: ONECONTACT, payload: res.data.oneContact })
+  } catch (err) {
+    dispatch({ type: ERROR, err: err.message })
+  }
+}
+
+export const addContact = (newContact) => async (dispatch) => {
+  dispatch({ type: LOAD })
+  try {
+    await axios.post(
+      'http://localhost:5001/api/contacts/addcontact',
       newContact,
     )
     //dispatch({ type: ADDCONTACT, payload: res.data.newContact })
@@ -24,11 +37,11 @@ const addContact = (newContact) => async (dispatch) => {
   }
 }
 
-const editContact = (editedContact) => async (dispatch) => {
+export const editContact = (editedContact, id) => async (dispatch) => {
   dispatch({ type: LOAD })
   try {
-    let res = await axios.put(
-      'http://localhost:5005/api/contacts/editcontact',
+    await axios.put(
+      `http://localhost:5001/api/contacts/editcontact/${id}`,
       editedContact,
     )
     //dispatch({ type: ADDCONTACT, payload: res.data.editedContact })
@@ -38,12 +51,10 @@ const editContact = (editedContact) => async (dispatch) => {
   }
 }
 
-const deleteContact = () => async (dispatch) => {
+export const deleteContact = (id) => async (dispatch) => {
   dispatch({ type: LOAD })
   try {
-    let res = await axios.delete(
-      'http://localhost:5005/api/contacts/deletecontact',
-    )
+    await axios.delete(`http://localhost:5001/api/contacts/deletecontact/${id}`)
     //dispatch({ type: ADDCONTACT })
     dispatch(getAllContacts())
   } catch (err) {

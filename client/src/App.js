@@ -1,11 +1,18 @@
-import './App.css'
 import ContactList from './Components/ContactList'
+import NavBar from './Components/Navbar'
+import AddContact from './Components/AddContact'
+import { Routes } from 'react-router-dom'
+import { Route } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello workshop mern App</h1>
-      <ContactList />
+      <NavBar />
+      <Routes>
+        <Route path="/allcontacts" element={<ContactList />} />
+        <Route path="/add" element={<AddContact />} />
+      </Routes>
     </div>
   )
 }
